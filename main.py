@@ -5,7 +5,7 @@ import os
 import json
 import llm
 import redis_manager
-import rag
+from rag import get_rag  # CHANGEMENT: Ajouter cet import
 
 
 app = FastAPI()
@@ -36,3 +36,9 @@ def respond_user(user_id: str, msg: str):
 @app.get("/")
 def home():
     return {"message": "API est en marche! Allez à /docs pour voir les routes disponibles."}
+
+
+@app.get("/stats/")  # OPTIONNEL: Endpoint de stats
+def stats():
+    rag = get_rag()
+    return {"chunks": rag.stats()['chunks']}

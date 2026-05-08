@@ -1,6 +1,5 @@
-
 from transformers import pipeline
-from rag import retrieve_chunks
+from rag import retrieve_chunks, get_rag  #  Ajouter get_rag
 
 
 def transform_question(last_question, previous_question, previous_answer):
@@ -13,6 +12,9 @@ def transform_question(last_question, previous_question, previous_answer):
     )
 
     prompt = f"""
+Sign in
+Use a different account
+
 
     given a chat history and user question which might reference context in the chat history,
     formulate a standalone question which can be understood without the chat history.
@@ -45,8 +47,7 @@ def transform_question(last_question, previous_question, previous_answer):
 
 
 def generate_response_rag_pipeline(user_query_fr: str):
-
-    relevant_chunks, sources = retrieve_chunks(user_query_fr, k=2)
+    relevant_chunks, sources = retrieve_chunks(user_query_fr, k=2)  # k=2 au lieu de k=3
     context_str = "\n".join(relevant_chunks)
 
     prompt = f"""
@@ -66,16 +67,16 @@ def generate_response_rag_pipeline(user_query_fr: str):
     """
 
     generator = pipeline(
-    "text2text-generation",
-    model="google/flan-t5-large",
-    device=0
+        "text2text-generation",
+        model="google/flan-t5-large",
+        device=0
     )
     
     try:
         result = generator(
-        prompt,
-        max_new_tokens=64
-    )
+            prompt,
+            max_new_tokens=64
+        )
 
         generated_text = result[0]['generated_text'].strip()
 
