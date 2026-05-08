@@ -1,0 +1,2 @@
+#pip install fastapi uvicorn transformers torch chromadb langchain langchain-text-splitters sentence-transformers redis
+pip install fastapi uvicorn chromadb langchain langchain-text-splitters sentence-transformers redis requests
